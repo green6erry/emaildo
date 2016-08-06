@@ -26,14 +26,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/green6erry/list_app.git"
+    "url": "git+https://github.com/green6erry/emaildo.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/green6erry/list_app/issues"
+    "url": "https://github.com/green6erry/emaildo/issues"
   },
-  "homepage": "https://github.com/green6erry/list_app#readme",
+  "homepage": "https://github.com/green6erry/emaildo#readme",
   "devDependencies": {
     "babel-core": "^6.13.2",
     "babel-loader": "^6.2.4",

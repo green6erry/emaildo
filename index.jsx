@@ -11,40 +11,52 @@ var hashHistory = router.hashHistory;
 
 var IndexRoute = router.IndexRoute;
 
-var EMAILS = {
-    inbox: {
-        0: {
-            id: 0,
-            from: "billg@microsoft.com",
-            to: "TeamWoz@Woz.org",
-            title: "Possible work opportunity",
-            content: "Dear Woz.  Fancy a job at Mister Softee?  Bill x"
-        },
-        1: {
-            id: 1,
-            from: "zuck@facebook.com",
-            to: "TeamWoz@Woz.org",
-            title: "Do you know PHP?",
-            content: "Dear Woz.  We are in need of a PHP expert.  Fast.  Zuck x"
-        }
-    },
-    spam: {
-        0: {
-            id: 0,
-            from: "ChEaPFl1ghTZ@hotmail.com",
-            to: "TeamWoz@Woz.org",
-            title: "WaNt CHEEp FlitZ",
-            content: "Theyre CheEp"
-        },
-        1: {
-            id: 1,
-            from: "NiKEAIRJordanZ@hotmail.com",
-            to: "TeamWoz@Woz.org",
-            title: "JorDanz For SAle",
-            content: "Theyre REELY CheEp"
-        }
-    }
-}
+
+var DATA = [{
+    name: "Inbox",
+    emails: [
+                {
+                    id: 0,
+                    from: "billg@microsoft.com",
+                    to: "TeamWoz@Woz.org",
+                    title: "Possible work opportunity",
+                    content: "Dear Woz.  Fancy a job at Mister Softee?  Bill x"
+                },
+                {
+                    id: 1,
+                    from: "zuck@facebook.com",
+                    to: "TeamWoz@Woz.org",
+                    title: "Do you know PHP?",
+                    content: "Dear Woz.  We are in need of a PHP expert.  Fast.  Zuck x"
+                }
+            ]
+},{
+    name: "Spam",
+    emails: [
+                {
+                    id: 0,
+                    from: "ChEaPFl1ghTZ@hotmail.com",
+                    to: "TeamWoz@Woz.org",
+                    title: "WaNt CHEEp FlitZ",
+                    content: "Theyre CheEp"
+                },
+                {
+                    id: 1,
+                    from: "NiKEAIRJordanZ@hotmail.com",
+                    to: "TeamWoz@Woz.org",
+                    title: "JorDanz For SAle",
+                    content: "Theyre REELY CheEp"
+                }
+            ]
+}];
+        
+
+// var data = [
+//  { name: 'Inbox', emails: [ { id: 0, from: 'blah@blah.com'}, { ...etc } ]},
+// { name: 'Spam', emails: [ { id: 23, from: 'massiveBigFun@blah.com'}, { ...etc } ]}
+// ];
+
+
 
 var Box = function(props) {
     return (
@@ -81,14 +93,13 @@ var EmailBig = function(props) {
           {props.body}
         </div>
       </section>
-
     );
 };
 
 var EmailSmallList = function(props) {
-    //Object is Inbox or spam
-    var emails = Object.keys(props.emails).map(function(emailId, index) {
-        var email = props.emails[emailId];
+    console.log('props small ', props);
+    var emails = props.box.emails.forEach(function(emailId, index) {
+        var email = props.box.emails[index];
         return (
             <li key={index} class="email-menu-item">
                 <input type="checkbox" />
@@ -100,6 +111,7 @@ var EmailSmallList = function(props) {
             </li>
         );
     });
+    console.log('small list emails ', emails);
     return (
         <ul class="message-list">
             {emails}
@@ -107,49 +119,9 @@ var EmailSmallList = function(props) {
     );
 };
 
-//
-var EmailSmallList = function(props) {
-    //Object is Inbox or spam
-    var emails = Object.keys(props.boxes).map(function(boxId, index) {
-        var box = props.boxes[boxId].map(function(emailId, index){
-            var email = box.emails[emailId];
-            return (
-            <li key={index} class="email-menu-item">
-                <input type="checkbox" />
-                <EmailSmall 
-                id={email.id}
-                from={email.from} 
-                to={email.to} 
-                title={email.title} />
-            </li>
-            );
-        })
-    });
-    return (
-        <ul class="message-list">
-            {emails}
-        </ul>
-    );
-};
 
 var EmailBigList = function(props) {
-    var email = Object.keys(props.boxes).map(function(boxId, index) {
-        var box = props.boxes[boxId].emails;
-        box.find(function(emailId) {
-            return box.emails[emailId];
-        });
-            return (
-            <li key={index} class="email-menu-item">
-                <input type="checkbox" />
-                <EmailSmall 
-                id={email.id}
-                from={email.from} 
-                to={email.to} 
-                title={email.title} />
-            </li>
-            );
-        });
-    
+    var email = props.email;
         return <EmailBig 
             id={email.id}
             from={email.from} 
@@ -162,15 +134,17 @@ var EmailBigList = function(props) {
 
 
 var BoxList = function(props) {
-    var boxes = Object.keys(props.boxes).map(function(boxId, index) {
-        var box = props.boxes[boxId];
+    var boxes = props.data.forEach(function(boxId, index) {
+        var box = props.data[index];
+        console.log('box ', box);
         return (
             <li key={index}>
-                <Box id={box.id} name={box.name}
-                         quantity={box.quantity} />
+                <Box name={box.name}
+                         quantity={box.emails.length} />
             </li>
         );
     });
+    console.log(boxes);
     return (
         <ul>
             {boxes}
@@ -180,49 +154,36 @@ var BoxList = function(props) {
 
 var EmailSmallListContainer = function() {
     // var emails = Object.getOwnPropertyNames(EMAILS);
-    return <EmailSmallList emails={EMAILS} />;
+    return <EmailSmallList box={DATA[0]} />;
 }; 
 
 var EmailBigListContainer = function() {
-    return <EmailBigList email={EMAILS} />;
+    return <EmailBigList email={DATA[0].emails[0]} />;
 }; 
 
 
 var BoxListContainer = function() {
-    return <BoxList boxes={EMAILS} />;
+    return <BoxList data={DATA} />;
 };
 
+var AllMail = function (props) {
+    var messages = []
+    var eachMessage = props.data.forEach(function(boxId, index){
+        var box = props.data[index];
+        box.emails.forEach(function(emailId, index){
+            var email = box.emails[index];
+            messages += email;
+        });
+    });
+    console.log('messages ', messages);
+    return messages;
+};
 
+var AllMailContainer = function () {
+    return <AllMail data={DATA} />
+};
 
 var PageContainer = function() {
-    return (
-        <div class="main">
-            <header class="header">
-                <form action="">
-                    <input type="search" name="s" placeholder="Search on simplest" />
-                    </form>
-                <nav class="nav-settings">
-                    <ul>
-                        <li><a href="#" class="icon icon-gear"></a></li>
-                        </ul>
-                    </nav>
-                <div class="clr"></div>
-            </header>
-            <div class="container">
-                <div class="messages">
-                    <h1>Inbox <span class="icon icon-arrow-down"></span></h1>
-                    <form action="">
-                        <input type="search" class="search" placeholder="Search Inbox" />
-                    </form>
-                    <EmailSmallListContainer />
-                </div>
-                <EmailBigListContainer />
-            </div>
-        </div>   
-    );
-};
-
-var App = function(props) {
     return (
         <div class="container app">
             <aside class="sidebar">
@@ -242,16 +203,51 @@ var App = function(props) {
                     </ul>
                 </nav>
             </aside>
-            {props.children}
+            <div class="main">
+                <header class="header">
+                    <form action="">
+                        <input type="search" name="s" placeholder="Search" />
+                        </form>
+                    <nav class="nav-settings">
+                        <ul>
+                            <li><a href="#" class="icon icon-gear"></a></li>
+                            </ul>
+                        </nav>
+                    <div class="clr"></div>
+                </header>
+                <div class="container">
+                    <div class="messages">
+                        <h1>Inbox <span class="icon icon-arrow-down"></span></h1>
+                        <form action="">
+                            <input type="search" class="search" placeholder="Search Inbox" />
+                        </form>
+                        <EmailSmallListContainer />
+                    </div>
+                    <EmailBigListContainer />
+                </div>
+            </div>  
+        </div> 
+    );
+};
+console.log('page container please woooork ', PageContainer);
+
+var App = function(props) {
+    console.log('App ', App);
+    return ( 
+        <div>
+            {props.children} 
         </div>
     );
 };
 
 var routes = (
+
     <Router history={hashHistory}>
-        <Route path="/mail" component={App}>
+        <Route path="/" component={App}>
             <IndexRoute component={PageContainer} />
-            <Route path=":boxId" component={EmailBigListContainer} />
+            <Route path="mail" component={PageContainer} />
+
+
         </Route>
     </Router>
 );
@@ -260,7 +256,9 @@ document.addEventListener('DOMContentLoaded', function() {
     ReactDOM.render(routes, document.getElementById('app'));
 });
 
-//app.listen(process.env.PORT || 8080);
+
+
+// app.listen(process.env.PORT || 8080);
 
 
 
